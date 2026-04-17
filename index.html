@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Nado Libya | منظومة الإدارة الاحترافية v4.0</title>
+    <title>Nado Libya | منظومة الإدارة الاحترافية v5.0</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
@@ -25,7 +25,7 @@
         <section id="home" class="tab-content active">
             <div class="stats-grid">
                 <div class="stat-card">
-                    <h3>إجمالي الرواتب 💰</h3>
+                    <h3>صافي الرواتب (هذا الشهر) 💰</h3>
                     <p id="total-salaries-view">0.00 د.ل</p>
                 </div>
                 <div class="stat-card">
@@ -35,7 +35,7 @@
             </div>
             <div class="hero-card mt-20">
                 <h2>أهلاً بك في Nado Libya 🌟</h2>
-                <p>نظامك الإداري المتكامل لإدارة الموارد البشرية والمالية بدقة عالية.</p>
+                <p>النسخة 5.0 المطورة للتقارير الرسمية.</p>
             </div>
         </section>
 
@@ -65,13 +65,15 @@
 
         <section id="expenses" class="tab-content">
             <div class="glass-card">
-                <h3>إضافة مصروف جديد 💸</h3>
+                <h3 id="expense-form-title">إضافة مصروف جديد 💸</h3>
+                <input type="hidden" id="editExpId">
                 <div class="form-grid">
                     <input type="text" id="expItem" placeholder="بيان المشتريات">
                     <input type="number" id="expPrice" placeholder="القيمة">
                     <input type="date" id="expDate">
                 </div>
-                <button class="btn-primary mt-10" onclick="saveExpense()">إضافة المصروف ✅</button>
+                <button id="btn-save-exp" class="btn-primary mt-10" onclick="saveExpense()">إضافة المصروف ✅</button>
+                <button id="btn-cancel-exp" class="btn-del mt-10" style="display:none" onclick="cancelEditExpense()">إلغاء التعديل</button>
             </div>
 
             <div class="glass-card mt-20">
@@ -82,27 +84,44 @@
 
         <section id="reports" class="tab-content">
             <div class="glass-card no-print">
-                <h3>تخصيص التقارير وإعدادات الشعار 📄</h3>
-                <div class="report-controls">
-                    <div class="logo-upload-box">
-                        <label for="logoInput">تغيير شعار الشركة:</label>
+                <h3>تخصيص التقارير والإعدادات الرسمية 📄</h3>
+                <div class="report-settings-grid">
+                    <div class="setting-item">
+                        <label>شعار الشركة:</label>
                         <input type="file" id="logoInput" accept="image/*" onchange="handleLogoUpload(event)">
                     </div>
-                    <hr class="mt-10">
+                    <div class="setting-item">
+                        <label>اسم الفرع:</label>
+                        <input type="text" id="branchName" placeholder="مثلاً: فرع طرابلس" oninput="updateStats()">
+                    </div>
+                    <div class="setting-item">
+                        <label>ثيم التقرير:</label>
+                        <select id="themeSelect">
+                            <option value="classic">كلاسيكي (أبيض واسود)</option>
+                            <option value="modern">مودرن (أزرق ملكي)</option>
+                            <option value="elegant">فاخر (ذهبي وأسود)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <hr class="mt-10">
+                <div class="report-controls">
                     <input type="month" id="reportMonthSelect">
-                    <button class="btn-outline" onclick="genFullEmpReport()">تقرير الموظفين الشامل</button>
+                    <button class="btn-outline" onclick="genFullEmpReport()">تقرير الرواتب الشامل</button>
                     <button class="btn-outline" onclick="genFullExpReport()">تقرير المصروفات</button>
                 </div>
-                <div class="single-rep-box mt-20">
+                <div class="single-rep-box mt-10">
                     <select id="empSelectReport"></select>
                     <button class="btn-outline" onclick="genIndividualReport()">تقرير موظف محدد</button>
                 </div>
-                <button class="btn-success mt-20" onclick="printToPDF()">تحميل بتنسيق PDF 📥</button>
+                <div class="print-actions mt-20">
+                    <button class="btn-success" onclick="printToPDF()">تحميل PDF 📥</button>
+                    <button class="btn-primary" style="width: 100%; margin-top: 10px;" onclick="window.print()">طباعة مباشرة 🖨️</button>
+                </div>
             </div>
 
             <div id="report-paper" class="report-sheet">
-                <div class="placeholder">التقرير سيظهر هنا بعد الضغط على أحد أزرار التقارير...</div>
-            </div>
+                </div>
         </section>
     </main>
 
